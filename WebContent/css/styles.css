@@ -1,0 +1,77 @@
+@charset "ISO-8859-1";
+
+html{
+	background: #f2f6f8; /* Old browsers */
+	background: -moz-linear-gradient(top, #f2f6f8 0%, #d8e1e7 91%, #d8e1e7 100%, #b5c6d0 100%, #b5c6d0 100%, #e0eff9 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #f2f6f8 0%,#d8e1e7 91%,#d8e1e7 100%,#b5c6d0 100%,#b5c6d0 100%,#e0eff9 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #f2f6f8 0%,#d8e1e7 91%,#d8e1e7 100%,#b5c6d0 100%,#b5c6d0 100%,#e0eff9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#e0eff9',GradientType=0 ); /* IE6-9 */
+ 	height:100vh;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif; 
+	  height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body{
+	margin-left: 15%;
+	height: 400px;
+}
+
+a{
+	color: black;
+	background-color: white;
+	padding: 10px 20px 10px 10px;
+}
+
+tr.spaceUnder>td {
+  padding-bottom: 2em;
+   vertical-align: top;
+  text-align: left;
+}
+
+.subElement{
+	
+	 vertical-align: top;
+  	 text-align: left;
+}
+
+a:hover{
+	color: red;
+}
+
+th{
+	 text-align: left;
+}
+
+table{
+	
+	width: 600px;
+	 text-align: left;
+	table-layout: fixed
+}
+
+
+
+
+
+
+
+#canLogo{
+	
+	width:300px;
+	height: 100px;
+	
+}
+
+#links{
+	width:800px;
+	
+}
+
+#foot{
+	clear:both;
+	padding-top:50px;
+	margin-top: 100px;
+}
