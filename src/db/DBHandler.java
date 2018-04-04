@@ -18,49 +18,84 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import model.Age;
 import model.AgeGroup;
-import model.GeoArea;
+import model.GeographicArea;
 
 
 public class DBHandler {
 	
-	private static String dbURL = "jdbc:derby://localhost:1527/G:/CanadaCensusDB";
+	private static String dbURL = "jdbc:derby://localhost:1527/CanadaCensusDB";
     private static Connection conn = null;
     
     public static final String CONNECTION_USER = "dwet";
     public static final String CONNECTION_PASSWORD = "password123";
     
+    public static final String PERSISTENCE_UNIT_NAME = "PROG3060_DWET_A2";
+    
+   
+    
 	
 	public static void main(String[] args)
 	{
-		
+	   
 	}
 	
-	//creates new db connection to derby
-	public Connection createConnection() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
-			
 
-        Properties tempConnProp = new Properties();
-        tempConnProp.put("user", CONNECTION_USER);
-        tempConnProp.put("password", CONNECTION_PASSWORD);
-        Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
-        Connection tempConn = DriverManager.getConnection(dbURL, tempConnProp);
-        DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-        tempConn.setAutoCommit(false);
-        tempConn.createStatement().executeUpdate("SET SCHEMA APP");
+		
+	//creates new db connection to derby
+	@PersistenceContext
+	EntityManagerFactory tempEntityManagerFactory = null;
+	
+	@PersistenceContext
+	EntityManager tempEntityManager = null;
+	
+	
+	public EntityManager createConnection() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
+		
+	
+		
+		try {
+				
+				tempEntityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+				tempEntityManager = tempEntityManagerFactory.createEntityManager();
+				tempEntityManager.getTransaction().begin();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
 
 	
-	     return tempConn;
+	     return tempEntityManager;
 		
 	}
 	
 	//shutsdown connection to derby database
-	private static void closeConnection() {
+	public void closeConnection() {
 		
 		try {
 			
-			 DriverManager.getConnection(dbURL + ";shutdown=true");
-             conn.close();
+
+            if (tempEntityManager != null)
+            {
+
+                tempEntityManager.close();
+
+            }
+
+            if (tempEntityManagerFactory != null)
+            {
+
+                tempEntityManagerFactory.close();
+
+            }
 			
 		}
 		
@@ -69,50 +104,75 @@ public class DBHandler {
 			e.printStackTrace();
 		}
 		
-	}
+	} 
 	
     private static Statement stmt = null;
     
-    //gets all data from HHE table
-    public static List<String> getGeoAreaList(Connection tempConnection, int level) throws SQLException
+    public List<Age> getAgeByGeoAreaID(int geoAreaID) 
     {
-    	String GEO_AREA_TABLE = "GEOGRAPHICAREA"; 
-        String tempSQLSelectQuery = "SELECT NAME from " + GEO_AREA_TABLE + " WHERE LEVEL = ? ORDER BY LEVEL";
-             
-
-        PreparedStatement tempPreparedStatement = tempConnection.prepareStatement(tempSQLSelectQuery);
-        tempPreparedStatement.setString(1, Integer.toString(level));
-        ResultSet tempResultSet = tempPreparedStatement.executeQuery();
-        
-        List <String> geoAreaList = new ArrayList <String>();
-
-        while (tempResultSet.next())
-        {
-   
-            String name = tempResultSet.getString("NAME");           
-            geoAreaList.add(name);
-
-        }
+    	List<Age>  tempAges = new ArrayList<Age>();
     	
-        return geoAreaList;
+		try {
+							
+				String tempJPLSelectQuery = "SELECT a from Age a WHERE a.geographicArea.geoAreaID = :id";
+			    Query tempQuery = tempEntityManager.createQuery(tempJPLSelectQuery).setParameter("id", geoAreaID); 
+			  
+			
+			    tempAges = tempQuery.getResultList();
+
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	
+		  
+    
+    	 return tempAges;
+
+    }
+    
+    //gets geographic areas sorted by heirachy level
+    public List<GeographicArea> getGeographicAreaList(int level) 
+    {
+    	List <GeographicArea>  tempGeoAreaList = new ArrayList();
     	
+		try {
+							
+				String tempJPLSelectQuery = "SELECT ga from GeographicArea ga WHERE ga.level = :level ORDER BY level";
+			    Query tempQuery = tempEntityManager.createQuery(tempJPLSelectQuery).setParameter("level", level); 
+			  
+			
+			    tempGeoAreaList = tempQuery.getResultList();
+			    System.out.println("hello" + tempGeoAreaList.toString());
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	
+		  
+    
+    	 return tempGeoAreaList;
+
+    }
+    public GeographicArea getGeoArea(int id)
+    {
+    	GeographicArea ga = tempEntityManager.find(GeographicArea.class, id);
+    	
+    	return ga;
     }
     
     //returns list of Geo Areaas with details
-    public static List<GeoArea> getGeoDetailsList(Connection tempConnection) throws SQLException
+    public static List<GeographicArea> getGeoDetailsList(Connection tempConnection) throws SQLException
     {
     
-        String tempSQLSelectQuery = "SELECT ga.ALTERNATIVECODE, ga.NAME, ga.CODE, ga.LEVEL, (SELECT SUM(MALE + FEMALE)"+
-        " FROM AGE a JOIN CENSUSYEAR c ON a.CENSUSYEAR = c.CENSUSYEARID JOIN AGEGROUP ag ON a.AGEGROUP = ag.AGEGROUPID " + 
-        		"WHERE a.GEOGRAPHICAREA = ga.GEOGRAPHICAREAID AND c.CENSUSYEARID = 2 AND AGEGROUPID = 1)" 
-        		+ "AS population FROM GEOGRAPHICAREA ga INNER JOIN AGE a ON ga.GEOGRAPHICAREAID = a.GEOGRAPHICAREA"+
-        		" JOIN CENSUSYEAR c ON a.CENSUSYEAR = c.CENSUSYEARID JOIN AGEGROUP ag ON a.AGEGROUP = ag.AGEGROUPID"+
-        		" WHERE c.CENSUSYEARID = 2 AND AGEGROUPID = 1 ORDER BY ga.ALTERNATIVECODE";
+        String tempSQLSelectQuery = "";
 
         PreparedStatement tempPreparedStatement = tempConnection.prepareStatement(tempSQLSelectQuery);
         ResultSet tempResultSet = tempPreparedStatement.executeQuery();
         
-        List <GeoArea> geoDetailList = new ArrayList <GeoArea>();
+        List <GeographicArea> geoDetailList = new ArrayList <GeographicArea>();
 
         while (tempResultSet.next())
         {
@@ -125,7 +185,7 @@ public class DBHandler {
             String pop = tempResultSet.getString("POPULATION"); 
             
             
-        	GeoArea ga = new GeoArea(altcode, name, code, level, pop);
+        	GeographicArea ga = new GeographicArea(altcode, name, code, level, pop);
             geoDetailList.add(ga);
      
         }

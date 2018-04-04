@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>PROG3060 - Assignment 1</title>
+<title>PROG3060 - Assignment 2</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 
 </head>
@@ -27,9 +27,7 @@
 				<div id ="links">
 			
 					<a href="GeoAreaServlet">Geographic Area Classifcation List</a>
-					
-					<a href="GeoAreaDetailServlet">Individual Geographic Area Details Page</a>
-					
+				
 					<a href="AgeGroupServlet">Age Group List</a>
 				</div>
 			</c:when>
@@ -38,12 +36,12 @@
 	    		<p>You do not have access to the database!Click below to navigate to log-in</p>
 	    		<a href="./index.jsp">Log-In</a>
 	  		</c:otherwise>
-		</c:choose>
+		</c:choose> 
 
 	
 
 	<div id="foot">
-		<p>Eric Tossell, David Wagner. PROG3060 Assignment 1</p>
+		<p>Eric Tossell, David Wagner. PROG3060 Assignment 2</p>
 	</div>
 
 </body>

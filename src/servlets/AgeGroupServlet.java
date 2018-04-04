@@ -52,7 +52,7 @@ public class AgeGroupServlet extends HttpServlet {
 			List <AgeGroup> ageGroupList = DBHandler.getAgeGroupList(conn);
 			for(AgeGroup element : ageGroupList)
 			{
-				if(element.getCensusYear().equals("1"))
+				if(element.getAges().get.equals("1"))
 				{
 					element.setCensusYear("2016");
 				}

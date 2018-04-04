@@ -9,7 +9,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>PROG3060 - Assignment 1</title>
+<title>PROG3060 - Assignment 2</title>
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 
 </head>
@@ -57,7 +58,7 @@
 	</c:choose>
 	
 	<div id="foot">
-		<p>Eric Tossell, David Wagner. PROG3060 Assignment 1</p>
+		<p>Eric Tossell, David Wagner. PROG3060 Assignment 2</p>
 	</div>
 
 </body>

@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>PROG3060 - Assignment 1</title>
+<title>PROG3060 - Assignment 2</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
   	<script>
   	
@@ -117,9 +117,10 @@
 						
 						  </tr>
 						  <br>
-						   <c:forEach items="${Cat0}" var="cat">
+						   <c:forEach items="${geoCat0}" var="geoArea">
 							  <tr>
-							   <td> <c:out value="${cat}"></c:out></td>	
+							   <td> <a href="GeoAreaDetailServlet?geoAreaID=<c:out value="${geoArea.geoAreaID}"></c:out>">  
+							   <c:out value="${geoArea.name}"></c:out></a></td>	
 							  </tr>
 						   </c:forEach>
 						</table>
@@ -133,9 +134,10 @@
 								
 							  </tr>
 							 <br>
-							    <c:forEach items="${Cat1}" var="cat">
+							    <c:forEach items="${geoCat1}" var="geoArea">
 								  <tr>
-								   <td> <c:out value="${cat}"></c:out></td>	
+								    <td> <a href="GeoAreaDetailServlet?geoAreaID=<c:out value="${geoArea.geoAreaID}"></c:out>">  
+							   			<c:out value="${geoArea.name}"></c:out></a></td>		
 								  </tr>
 							   </c:forEach>
 						</table>
@@ -149,9 +151,10 @@
 						
 						  </tr>
 						  <br>
-						  <c:forEach items="${Cat2}" var="cat">
+						  <c:forEach items="${geoCat2}" var="geoArea">
 							  <tr>
-							   <td> <c:out value="${cat}"></c:out></td>	
+							   <td> <a href="GeoAreaDetailServlet?geoAreaID=<c:out value="${geoArea.geoAreaID}"></c:out>">  
+							   <c:out value="${geoArea.name}"></c:out></a></td>		
 							  </tr>
 						   </c:forEach>
 						</table>
@@ -165,9 +168,10 @@
 						
 						  </tr>
 						    <br>
-						   <c:forEach items="${Cat3}" var="cat">
+						   <c:forEach items="${geoCat3}" var="geoArea">
 							  <tr>
-							   <td> <c:out value="${cat}"></c:out></td>	
+							    <td> <a href="GeoAreaDetailServlet?geoAreaID=<c:out value="${geoArea.geoAreaID}"></c:out>">  
+							    <c:out value="${geoArea.name}"></c:out></a></td>	
 							  </tr>
 						   </c:forEach>
 						</table>
@@ -187,7 +191,7 @@
 	
 
 	<div id="foot">
-		<p>Eric Tossell, David Wagner. PROG3060 Assignment 1</p>
+		<p>Eric Tossell, David Wagner. PROG3060 Assignment 2</p>
 	</div>
 
 </body>

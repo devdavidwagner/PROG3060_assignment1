@@ -10,7 +10,7 @@ package servlets;
 import java.io.IOException;
 
 import java.util.List;
-
+import javax.persistence.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +22,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import db.DBHandler;
+import model.GeographicArea;
 
 /**
  * Servlet implementation class GeoAreaServlet
@@ -46,18 +47,22 @@ public class GeoAreaServlet extends HttpServlet {
 
 		DBHandler db = new DBHandler();
 		
-		Connection conn;
+		
+	
 		try {
-			conn = db.createConnection();
-			List <String> geoCat0 = DBHandler.getGeoAreaList(conn,0);
-			List <String> geoCat1 = DBHandler.getGeoAreaList(conn,1);
-			List <String> geoCat2 = DBHandler.getGeoAreaList(conn,2);
-			List <String> geoCat3 = DBHandler.getGeoAreaList(conn,3);
+			db.createConnection();
 			
-			request.setAttribute("Cat0", geoCat0);
-			request.setAttribute("Cat1", geoCat1);
-			request.setAttribute("Cat2", geoCat2);
-			request.setAttribute("Cat3", geoCat3);
+			List<GeographicArea> geoCat0 = db.getGeographicAreaList(0);
+			List<GeographicArea> geoCat1 = db.getGeographicAreaList(1);
+			List<GeographicArea> geoCat2 = db.getGeographicAreaList(2);
+			List<GeographicArea> geoCat3 = db.getGeographicAreaList(3);
+			
+			request.setAttribute("geoCat0", geoCat0);
+			request.setAttribute("geoCat1", geoCat1);
+			request.setAttribute("geoCat2", geoCat2);
+			request.setAttribute("geoCat3", geoCat3);
+			
+			
 	
 		} catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			// TODO Auto-generated catch block

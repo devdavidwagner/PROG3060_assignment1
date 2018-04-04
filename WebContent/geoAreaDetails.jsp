@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>PROG3060 - Assignment 1</title>
+<title>PROG3060 - Assignment 2</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 
 </head>
@@ -27,28 +27,25 @@
 		<tr>
 			<th>Name</th>
 			<th>Code</th>
+			<th>Alternative Code</th>
 			<th>Level</th>
+			<th>Description</th>
+			<th>Male</th>
+			<th>Female</th>
 			<th>Total Population</th>
-			<th>Areas Within</th>
+			
 		</tr>
-		<c:forEach items="${geoArea}" var="geoArea">
+		<c:forEach items="${age}" var="age">
 		<tr class="spaceUnder">
 			 				
-			<td><c:out value="${geoArea.name}"></c:out></td>	
-			<td><c:out value="${geoArea.code}"></c:out></td>
-			<td><c:out value="${geoArea.level}"></c:out></td>
-			<td><c:out value="${geoArea.population}"></c:out></td>
-			<td>
-				 <table>
-				 	<c:forEach items="${geoArea.areasWithin}" var="within">
-			            <tr class ="subElement">
-			              <td>
-			                <c:out value="${within}"></c:out>
-			              </td>
-			            </tr>
-		           	</c:forEach>
-          		 </table>
-			</td>
+			<td><c:out value="${age.getGeoArea().name}"></c:out></td>	
+			<td><c:out value="${age.getGeoArea().code}"></c:out></td>
+			<td><c:out value="${age.getGeoArea().altCode}"></c:out></td>
+			<td><c:out value="${age.getGeoArea().level}"></c:out></td>
+			<td><c:out value="${age.getAgeGroup().description}"></c:out></td>
+			<td><c:out value="${age.male}"></c:out></td>
+			<td><c:out value="${age.female}"></c:out></td>
+			<td><c:out value="${age.combined}"></c:out></td>
 		</tr>
 	   	</c:forEach>
 		
@@ -66,7 +63,7 @@
 	</c:choose>
 	
 	<div id="foot">
-		<p>Eric Tossell, David Wagner. PROG3060 Assignment 1</p>
+		<p>Eric Tossell, David Wagner. PROG3060 Assignment 2</p>
 	</div>
 
 </body>

@@ -21,7 +21,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.GeoArea;
+import model.Age;
+import model.GeographicArea;
 import db.DBHandler;
 
 /**
@@ -46,91 +47,19 @@ public class GeoAreaDetailServlet extends HttpServlet {
 		
 		DBHandler db = new DBHandler();
 		
-		Connection conn;
 		try {
-			conn = db.createConnection();
-			List <GeoArea> geoAreaDetails = DBHandler.getGeoDetailsList(conn);
+			db.createConnection();
+			
+			int geoAreaID = Integer.parseInt(request.getParameter("geoAreaID"));
+			
+			List<Age> age = db.getAgeByGeoAreaID(geoAreaID);
 			
 			
-			
-			
-			for(GeoArea element : geoAreaDetails){
-				String level = element.getLevel();
-				String altCode = element.getAltCode();
-				String code = element.getCode();
-				
-				if(level.equals("0")){
-					List<String> areasWithin = new ArrayList<String>();
-					
-					
-					for(GeoArea subElement : geoAreaDetails){
-						
-						String subLevel = subElement.getLevel();
-						
-						if(subLevel.equals("1"))
-						{
-							areasWithin.add(subElement.getName());
-						}
-						
-						
-					}
-					
-					element.setAreasWithin(areasWithin);
-				}
-				else if(level.equals("1"))
-				{
-					List<String> areasWithin = new ArrayList<String>();
-					
-					for(GeoArea subElement : geoAreaDetails){
-						String subLevel = subElement.getLevel();
-						
-						if(subLevel.equals("2")){
-							
-							String subAltCode = subElement.getAltCode();
-							String splitSubAltCode = subAltCode.substring(0,2);
-							if(splitSubAltCode.equals(altCode))
-							{
-								areasWithin.add(subElement.getName());
-							}
-						}
-						
-						
-					}
-					
-					element.setAreasWithin(areasWithin);
-				}
-				else if(level.equals("2"))
-				{
-					List<String> areasWithin = new ArrayList<String>();
-					
-					for(GeoArea subElement : geoAreaDetails){
-						String subLevel = subElement.getLevel();
-						
-						if(subLevel.equals("3")){
-							
-							String altCodeSplit = element.getCode();
-							String subAltCode = subElement.getCode().substring(2,5);
-																
-							if(subAltCode.equals(altCodeSplit))
-							{
-								areasWithin.add(subElement.getName());
-							}
-						}
-						
-						
-					}
-					
-					element.setAreasWithin(areasWithin);
-				}
-				
-				
-			}
-			
-			request.setAttribute("geoArea", geoAreaDetails);
-			
+			request.setAttribute("age", age);
 			
 	
-
+			
+	
 		} catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
