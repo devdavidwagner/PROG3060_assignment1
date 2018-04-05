@@ -113,12 +113,12 @@
 						<table>
 						<br>
 						  <tr>
-						    <th>CATEGORY 0</th>
+						    <p>CATEGORY 0</p>
 						
 						  </tr>
 						  <br>
 						   <c:forEach items="${geoCat0}" var="geoArea">
-							  <tr>
+							  <tr  class="spaceUnder">
 							   <td> <a href="GeoAreaDetailServlet?geoAreaID=<c:out value="${geoArea.geoAreaID}"></c:out>">  
 							   <c:out value="${geoArea.name}"></c:out></a></td>	
 							  </tr>
@@ -129,13 +129,13 @@
 					<div id="cat1">
 						<table>
 							<br>
-							  <tr>
-							    <th>CATEGORY 1</th>
+							  <tr >
+							    <p>CATEGORY 1</p>
 								
 							  </tr>
 							 <br>
 							    <c:forEach items="${geoCat1}" var="geoArea">
-								  <tr>
+								  <tr  class="spaceUnder">
 								    <td> <a href="GeoAreaDetailServlet?geoAreaID=<c:out value="${geoArea.geoAreaID}"></c:out>">  
 							   			<c:out value="${geoArea.name}"></c:out></a></td>		
 								  </tr>
@@ -147,12 +147,12 @@
 						<table>
 						 <br>
 						  <tr>
-						    <th>CATEGORY 2</th>
+						    <p>CATEGORY 2</p>
 						
 						  </tr>
 						  <br>
 						  <c:forEach items="${geoCat2}" var="geoArea">
-							  <tr>
+							  <tr  class="spaceUnder">
 							   <td> <a href="GeoAreaDetailServlet?geoAreaID=<c:out value="${geoArea.geoAreaID}"></c:out>">  
 							   <c:out value="${geoArea.name}"></c:out></a></td>		
 							  </tr>
@@ -164,12 +164,12 @@
 						<table>
 						  <br>
 						  <tr>
-						    <th>CATEGORY 3</th>
+						    <p>CATEGORY 3</p>
 						
 						  </tr>
 						    <br>
 						   <c:forEach items="${geoCat3}" var="geoArea">
-							  <tr>
+							  <tr  class="spaceUnder">
 							    <td> <a href="GeoAreaDetailServlet?geoAreaID=<c:out value="${geoArea.geoAreaID}"></c:out>">  
 							    <c:out value="${geoArea.name}"></c:out></a></td>	
 							  </tr>

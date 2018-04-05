@@ -1,5 +1,6 @@
 <!--  DAVID W + ERIC T. MAIN MENU PAGE  -->
 <!--  CREATE 2/16/2018  -->
+<!--  A2 4/4/2018  -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 

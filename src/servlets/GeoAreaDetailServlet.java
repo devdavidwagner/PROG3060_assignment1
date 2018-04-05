@@ -56,6 +56,7 @@ public class GeoAreaDetailServlet extends HttpServlet {
 			
 			
 			request.setAttribute("age", age);
+			request.setAttribute("geoArea", age.get(0).getGeoArea());
 			
 	
 			

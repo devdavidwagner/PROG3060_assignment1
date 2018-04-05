@@ -21,33 +21,33 @@
   	<c:when test="${sessionScope.user != null}">
 			
 	<a href="./menu.jsp">Back to Menu</a>
-	<h2>Geographic Area Details List</h2>
+	<h2>Geographic Area Details for ${geoArea.getName()}</h2>
+	<p>Code: ${geoArea.getCode()}</p>
+	<p>Alternative Code: ${geoArea.getAltCode()}</p>
+	<p>Level: ${geoArea.getLevel()}</p>
+	<hr>
 	
 	<table>
 		<tr>
-			<th>Name</th>
-			<th>Code</th>
-			<th>Alternative Code</th>
-			<th>Level</th>
-			<th>Description</th>
+			<th>Census Year</th>
+			<th>Age Group</th>
 			<th>Male</th>
 			<th>Female</th>
 			<th>Total Population</th>
 			
 		</tr>
+
 		<c:forEach items="${age}" var="age">
 		<tr class="spaceUnder">
-			 				
-			<td><c:out value="${age.getGeoArea().name}"></c:out></td>	
-			<td><c:out value="${age.getGeoArea().code}"></c:out></td>
-			<td><c:out value="${age.getGeoArea().altCode}"></c:out></td>
-			<td><c:out value="${age.getGeoArea().level}"></c:out></td>
+			<td><c:out value="${age.getCensusYear().getCensusYear()}"></c:out></td>
 			<td><c:out value="${age.getAgeGroup().description}"></c:out></td>
 			<td><c:out value="${age.male}"></c:out></td>
 			<td><c:out value="${age.female}"></c:out></td>
 			<td><c:out value="${age.combined}"></c:out></td>
+	 
 		</tr>
-	   	</c:forEach>
+	   </c:forEach>
+
 		
 	
 	

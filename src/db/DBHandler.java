@@ -108,6 +108,30 @@ public class DBHandler {
 	
     private static Statement stmt = null;
     
+    
+    public int totalHouseholds()
+    {
+    	int numberOfHouseholds = 0;
+    	
+    	try {
+			
+			String tempJPLSelectQuery = "SELECT h from Household h WHERE h.censusYear = :censusYear"
+					+ "AND ";
+		    Query tempQuery = tempEntityManager.createQuery(tempJPLSelectQuery).setParameter("censusYear", 1); 
+		  
+		
+		    numberOfHouseholds = tempQuery.getResultList().size();
+
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+
+    	
+    	
+    	return numberOfHouseholds;
+    }
     public List<Age> getAgeByGeoAreaID(int geoAreaID) 
     {
     	List<Age>  tempAges = new ArrayList<Age>();

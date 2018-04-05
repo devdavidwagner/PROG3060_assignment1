@@ -43,11 +43,13 @@ a:hover{
 
 th{
 	 text-align: left;
+	 padding-right: 10px;
+	 margin-bottom: 10px;
 }
 
 table{
 	
-	width: 600px;
+	width: 800px;
 	 text-align: left;
 	table-layout: fixed
 }
