@@ -51,13 +51,24 @@ public class GeoAreaDetailServlet extends HttpServlet {
 			db.createConnection();
 			
 			int geoAreaID = Integer.parseInt(request.getParameter("geoAreaID"));
+		
+			List<Age> ages = db.getAgeByGeoAreaID(geoAreaID);
+			Integer numberHouseholdsWithin = 0;
+			GeographicArea geoArea = ages.get(0).getGeoArea();
+			List<String> geoAreasWithin = db.getAreasWithin(geoArea.getLevel(), geoArea.getAltCode());
 			
-			List<Age> age = db.getAgeByGeoAreaID(geoAreaID);
+		
+			System.out.println("GEOGRAPHIC AREA: " + geoArea.getName());
+			if(geoArea.getLevel() == 0 || geoArea.getLevel() == 1)
+			{
+				numberHouseholdsWithin = db.totalHouseholds(geoArea.getGeoAreaID());
+			}
 			
 			
-			request.setAttribute("age", age);
-			request.setAttribute("geoArea", age.get(0).getGeoArea());
-			
+			request.setAttribute("age", ages);
+			request.setAttribute("geoArea", geoArea);
+			request.setAttribute("numberHouseholdsWithin", numberHouseholdsWithin);
+			request.setAttribute("geoAreasWithin", geoAreasWithin);
 	
 			
 	

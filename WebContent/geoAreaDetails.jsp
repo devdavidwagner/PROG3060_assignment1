@@ -25,6 +25,15 @@
 	<p>Code: ${geoArea.getCode()}</p>
 	<p>Alternative Code: ${geoArea.getAltCode()}</p>
 	<p>Level: ${geoArea.getLevel()}</p>
+	
+	<c:if test="${geoArea.getLevel() == 0 || geoArea.getLevel() ==1}">
+				<p>Households that Fit Criteria = ${numberHouseholdsWithin}</p>
+	</c:if>
+	
+	<h4>Areas within: ${geoArea.getName()}</h4>
+	<c:forEach items="${geoAreasWithin}" var="geoArea">
+		<p><c:out value="${geoArea}"></c:out></p>
+	</c:forEach>
 	<hr>
 	
 	<table>
@@ -35,6 +44,7 @@
 			<th>Female</th>
 			<th>Total Population</th>
 			
+			
 		</tr>
 
 		<c:forEach items="${age}" var="age">
@@ -44,7 +54,8 @@
 			<td><c:out value="${age.male}"></c:out></td>
 			<td><c:out value="${age.female}"></c:out></td>
 			<td><c:out value="${age.combined}"></c:out></td>
-	 
+			
+ 
 		</tr>
 	   </c:forEach>
 

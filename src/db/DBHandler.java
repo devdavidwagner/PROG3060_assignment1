@@ -27,6 +27,7 @@ import javax.persistence.Query;
 import model.Age;
 import model.AgeGroup;
 import model.GeographicArea;
+import model.Household;
 
 
 public class DBHandler {
@@ -108,19 +109,85 @@ public class DBHandler {
 	
     private static Statement stmt = null;
     
-    
-    public int totalHouseholds()
+    public List<String> getAreasWithin(int level, int altCode)
     {
+    	List<String> geoAreasWithin = new ArrayList<>();
+    	
+    	String tempJPLSelectQuery = "SELECT g from GeographicArea g";
+    	Query tempQuery = tempEntityManager.createQuery(tempJPLSelectQuery);
+    	
+    	List<GeographicArea> geoAreas =  tempQuery.getResultList();
+    	
+    	for(GeographicArea g : geoAreas) {
+    		
+    		if(level == 0)
+    		{
+    			if(g.getLevel() > 0)
+    			{
+	    			String altCodeSub = Integer.toString(g.getAltCode()).substring(0, 1);
+	    			if(Integer.parseInt(altCodeSub) == altCode) {
+	    				geoAreasWithin.add(g.getName());
+	    			}
+    			}
+    		}
+    		else if(level == 1)
+    		{
+    			if(g.getLevel() > 1)
+    			{
+	    			String altCodeSub = Integer.toString(g.getAltCode()).substring(0, 2);
+	    			if(Integer.parseInt(altCodeSub) == altCode) {
+	    				geoAreasWithin.add(g.getName());
+	    			}
+    			}
+    		}
+    		else if(level == 2)
+    		{
+    			if(g.getLevel() > 2)
+    			{
+	    			String altCodeSub = Integer.toString(g.getAltCode()).substring(0, 5);
+	    			if(Integer.parseInt(altCodeSub) == altCode) {
+	    				geoAreasWithin.add(g.getName());
+	    			}
+    			}
+    		}
+    		
+    		
+    	}
+    	
+    	
+    	
+    	return geoAreasWithin;
+    }
+    
+    
+    public int totalHouseholds(int geoAreaID)
+    {
+    	System.out.println("AREA ID" + geoAreaID);
     	int numberOfHouseholds = 0;
     	
     	try {
 			
-			String tempJPLSelectQuery = "SELECT h from Household h WHERE h.censusYear = :censusYear"
-					+ "AND ";
-		    Query tempQuery = tempEntityManager.createQuery(tempJPLSelectQuery).setParameter("censusYear", 1); 
+			String tempJPLSelectQuery = "SELECT h from Household h WHERE h.censusYear.censusYearID = :censusYear "
+					+ "AND h.householdType.id = :typeID AND h.householdSize.id = :sizeID AND h.householdEarners.id = :earnerID "
+					+ "AND h.totalIncome.id = :incomeID AND h.geographicArea.geoAreaID = :geoID";
+			
+		    Query tempQuery = tempEntityManager.createQuery(tempJPLSelectQuery)
+		    		.setParameter("censusYear", 1)
+		    		.setParameter("typeID", 4)
+		    		.setParameter("sizeID", 3)
+		    		.setParameter("earnerID", 3)
+		    		.setParameter("incomeID", 15)
+		    		.setParameter("geoID", geoAreaID); 
 		  
 		
-		    numberOfHouseholds = tempQuery.getResultList().size();
+		   //numberOfHouseholds = tempQuery.getResultList().size();
+		    List<Household> houses =  tempQuery.getResultList();
+		    for(Household h : houses)
+		    {
+		    	numberOfHouseholds++;
+		    	System.out.println(h.getGeographicArea().getName());
+		    }
+
 
 		}
 		catch(Exception e)

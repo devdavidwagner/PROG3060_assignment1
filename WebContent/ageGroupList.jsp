@@ -34,6 +34,7 @@
 				<th>Age Group</th>
 				<th>Male Population</th>
 				<th>Female Population</th>
+			
 			</tr>
 			
 			
