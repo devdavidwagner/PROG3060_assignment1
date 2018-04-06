@@ -39,7 +39,7 @@
 			 <c:forEach items="${households}" var="house">
 			 		<tr>
 			 			<td><c:out value="${house.getGeographicArea().getName()}"></c:out></td>
-						<td><c:out value="${house.getTotalIncome().getDescription()}"></c:out></td>
+						<td>$<c:out value="${house.getNumberReported()}"></c:out></td>
 					<tr>
 			 </c:forEach>
 			

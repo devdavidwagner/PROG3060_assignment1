@@ -30,8 +30,8 @@
 	
 	<c:if test="${geoArea.getLevel() == 0 || geoArea.getLevel() ==1 || geoArea.getLevel() == 2}">
 	
-			<p>Households that Fit Criteria = ${numberHouseholdsWithin}</p>
-
+			<h4>Households that Fit Criteria:  ${numberHouseholdsWithin}</h4>
+		
 		<hr>
 		<h4>Areas within: ${geoArea.getName()}</h4>
 		

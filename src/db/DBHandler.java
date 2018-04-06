@@ -345,9 +345,15 @@ public class DBHandler {
     	List<Household> medianList = new ArrayList<>();
     	
 
-		String tempJPLSelectQuery = "SELECT h from Household h WHERE h.censusYear.censusYearID = :censusYear "
-				+ "AND h.householdType.id = :typeID AND h.householdSize.id = :sizeID AND h.householdEarners.id = :earnerID "
-				+ "AND h.geographicArea.level = :level AND h.householdsByAgeRange.id = :ageRange ORDER BY h.totalIncome DESC";
+		String tempJPLSelectQuery = "SELECT h from Household h WHERE "
+				+ "h.censusYear.censusYearID = :censusYear "
+				+ "AND h.householdType.id = :typeID "
+				+ "AND h.householdSize.id = :sizeID "
+				+ "AND h.householdEarners.id = :earnerID "
+				+ "AND h.geographicArea.level = :level "
+				+ "AND h.householdsByAgeRange.id = :ageRange "
+				+ "AND h.totalIncome.id = :income "
+				+ "ORDER BY h.numberReported DESC";
 		
 	    Query tempQuery = tempEntityManager.createQuery(tempJPLSelectQuery)
 	    		.setParameter("censusYear", 1)
@@ -355,10 +361,11 @@ public class DBHandler {
 	    		.setParameter("sizeID", 3)
 	    		.setParameter("earnerID", 3)
 	    		.setParameter("level", 1)
-	    		.setParameter("ageRange", (Integer) 9); 
+	    		.setParameter("ageRange", (Integer) 9)
+	    		.setParameter("income", 22); 
 	    
-
 	    medianList = tempQuery.getResultList();
+
 	
     	
     	return medianList;
