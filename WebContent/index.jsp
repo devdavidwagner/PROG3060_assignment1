@@ -1,5 +1,7 @@
 <!--  DAVID W + ERIC T. INTRO/INDEX PAGE  -->
 <!--  CREATE 2/16/2018  -->
+<!--  FINISH A2 4/6/2018  -->
+
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -28,7 +30,7 @@
 		<form action="LoginServlet" method="post">
 			<label for="username">Username</label>
 			<input type ="text" name ="username"/>
-			<label for="username">Password</label>
+			<label for="Password">Password</label>
 			<input type ="password" name ="password"/>
 		
 			<input type ="submit" name ="submit" value= "Submit">

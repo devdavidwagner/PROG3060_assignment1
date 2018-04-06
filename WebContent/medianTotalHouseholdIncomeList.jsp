@@ -1,6 +1,6 @@
-<!--  DAVID W + ERIC T. AGE GROUP LIST PAGE  -->
+<!--  DAVID W + ERIC T. MEDIAN TOTAL INCOME PAGE  -->
 <!--  CREATE 2/14/2018  -->
-<!--  FINISH 4/6/2018  -->
+<!--  FINISH A2 4/6/2018  -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -23,27 +23,23 @@
 	<c:choose>
   	<c:when test="${sessionScope.user != null}">
 		<a href="./menu.jsp">Back to Menu</a>
-		<h2>Age Group List</h2>
+		<h2>Median Total Income List</h2>
 		<br>
 		
 		
 		
 		<table>
 			<tr>
-			    <th>Census Year</th>
-				<th>Age Group</th>
-				<th>Male Population</th>
-				<th>Female Population</th>
+			    <th>Name</th>
+				<th>Median Total Income</th>
 			
 			</tr>
 			
 			
-			 <c:forEach items="${ageGroups}" var="age">
+			 <c:forEach items="${households}" var="house">
 			 		<tr>
-			 			<td><c:out value="${age.censusYear.censusYear}"></c:out></td>
-						<td><c:out value="${age.ageGroup.description}"></c:out></td>
-						<td><c:out value="${age.male}"></c:out></td>
-						<td><c:out value="${age.female}"></c:out></td>
+			 			<td><c:out value="${house.getGeographicArea().getName()}"></c:out></td>
+						<td><c:out value="${house.getTotalIncome().getDescription()}"></c:out></td>
 					<tr>
 			 </c:forEach>
 			

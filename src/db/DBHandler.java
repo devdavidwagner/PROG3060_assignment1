@@ -2,6 +2,7 @@
 
 //CREATED 2/13/2018
 //FINISH v.10 2/16/2018
+//FINISH A2 V.20 4/6/2018
 
 //DB HANDLER CLASS TO CONNECT TO DERBY DATABASE
 
@@ -58,6 +59,7 @@ public class DBHandler {
 	EntityManager tempEntityManager = null;
 	
 	
+	//starts manager factory
 	public EntityManager createConnection() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
 		
 	
@@ -78,7 +80,7 @@ public class DBHandler {
 		
 	}
 	
-	//shutsdown connection to derby database
+	//shutsdown connection entity manager
 	public void closeConnection() {
 		
 		try {
@@ -109,44 +111,45 @@ public class DBHandler {
 	
     private static Statement stmt = null;
     
-    public List<String> getAreasWithin(int level, int altCode)
+    //gets all geo areas within certain heirachy 
+    public List<GeographicArea> getAreasWithin(int level, int altCode)
     {
-    	List<String> geoAreasWithin = new ArrayList<>();
+    	List<GeographicArea> geoAreasWithin = new ArrayList<>();
     	
-    	String tempJPLSelectQuery = "SELECT g from GeographicArea g";
+    	String tempJPLSelectQuery = "SELECT g from GeographicArea g ORDER BY g.altCode DESC";
     	Query tempQuery = tempEntityManager.createQuery(tempJPLSelectQuery);
     	
     	List<GeographicArea> geoAreas =  tempQuery.getResultList();
+    	
     	
     	for(GeographicArea g : geoAreas) {
     		
     		if(level == 0)
     		{
-    			if(g.getLevel() > 0)
+    			if(g.getLevel() == level + 1)
     			{
-	    			String altCodeSub = Integer.toString(g.getAltCode()).substring(0, 1);
-	    			if(Integer.parseInt(altCodeSub) == altCode) {
-	    				geoAreasWithin.add(g.getName());
-	    			}
+	    	
+	    				geoAreasWithin.add(g);
+	    			
     			}
     		}
     		else if(level == 1)
     		{
-    			if(g.getLevel() > 1)
+    			if(g.getLevel() == level + 1)
     			{
 	    			String altCodeSub = Integer.toString(g.getAltCode()).substring(0, 2);
 	    			if(Integer.parseInt(altCodeSub) == altCode) {
-	    				geoAreasWithin.add(g.getName());
+	    				geoAreasWithin.add(g);
 	    			}
     			}
     		}
     		else if(level == 2)
     		{
-    			if(g.getLevel() > 2)
+    			if(g.getLevel() == level + 1)
     			{
 	    			String altCodeSub = Integer.toString(g.getAltCode()).substring(0, 5);
 	    			if(Integer.parseInt(altCodeSub) == altCode) {
-	    				geoAreasWithin.add(g.getName());
+	    				geoAreasWithin.add(g);
 	    			}
     			}
     		}
@@ -160,6 +163,7 @@ public class DBHandler {
     }
     
     
+    //returns total households based upon criteria given
     public int totalHouseholds(int geoAreaID)
     {
     	System.out.println("AREA ID" + geoAreaID);
@@ -169,7 +173,7 @@ public class DBHandler {
 			
 			String tempJPLSelectQuery = "SELECT h from Household h WHERE h.censusYear.censusYearID = :censusYear "
 					+ "AND h.householdType.id = :typeID AND h.householdSize.id = :sizeID AND h.householdEarners.id = :earnerID "
-					+ "AND h.totalIncome.id = :incomeID AND h.geographicArea.geoAreaID = :geoID";
+					+ "AND h.totalIncome.id = :incomeID AND h.geographicArea.geoAreaID = :geoID AND h.householdsByAgeRange.id = :ageRange";
 			
 		    Query tempQuery = tempEntityManager.createQuery(tempJPLSelectQuery)
 		    		.setParameter("censusYear", 1)
@@ -177,16 +181,16 @@ public class DBHandler {
 		    		.setParameter("sizeID", 3)
 		    		.setParameter("earnerID", 3)
 		    		.setParameter("incomeID", 15)
-		    		.setParameter("geoID", geoAreaID); 
+		    		.setParameter("geoID", geoAreaID)
+		    		.setParameter("ageRange", (Integer) 7); 
 		  
 		
 		   //numberOfHouseholds = tempQuery.getResultList().size();
 		    List<Household> houses =  tempQuery.getResultList();
-		    for(Household h : houses)
-		    {
-		    	numberOfHouseholds++;
-		    	System.out.println(h.getGeographicArea().getName());
-		    }
+		   
+		
+		    numberOfHouseholds = houses.get(0).getNumberReported();
+		    
 
 
 		}
@@ -199,6 +203,8 @@ public class DBHandler {
     	
     	return numberOfHouseholds;
     }
+    
+    //returns age object depending on geographic Area
     public List<Age> getAgeByGeoAreaID(int geoAreaID) 
     {
     	List<Age>  tempAges = new ArrayList<Age>();
@@ -254,63 +260,109 @@ public class DBHandler {
     	return ga;
     }
     
-    //returns list of Geo Areaas with details
-    public static List<GeographicArea> getGeoDetailsList(Connection tempConnection) throws SQLException
-    {
-    
-        String tempSQLSelectQuery = "";
-
-        PreparedStatement tempPreparedStatement = tempConnection.prepareStatement(tempSQLSelectQuery);
-        ResultSet tempResultSet = tempPreparedStatement.executeQuery();
-        
-        List <GeographicArea> geoDetailList = new ArrayList <GeographicArea>();
-
-        while (tempResultSet.next())
-        {
-        
-        	
-        	String altcode = tempResultSet.getString("ALTERNATIVECODE"); 
-            String name = tempResultSet.getString("NAME");       
-            String code = tempResultSet.getString("CODE"); 
-            String level = tempResultSet.getString("LEVEL"); 
-            String pop = tempResultSet.getString("POPULATION"); 
-            
-            
-        	GeographicArea ga = new GeographicArea(altcode, name, code, level, pop);
-            geoDetailList.add(ga);
-     
-        }
-    	
-        return geoDetailList;
-    	
-    }
     
     //returns age groups
-    public static List<AgeGroup> getAgeGroupList(Connection tempConnection) throws SQLException
+    public List<Age> getAgeGroupList()
     {
-    	String tempSQLSelectQuery = "SELECT DISTINCT a.censusyear, ag.ageGroupID , ag.DESCRIPTION, SUM(a.MALE) AS MALE, SUM(a.FEMALE) AS FEMALE "+ 
-				"FROM AGE a JOIN AGEGROUP ag ON a.AGEGROUP = ag.AGEGROUPID "+
-    			"JOIN GEOGRAPHICAREA ga ON a.GEOGRAPHICAREA = ga.GEOGRAPHICAREAID "+
-    			"WHERE ga.GEOGRAPHICAREAID = 1 AND ag.ageGroupID "+
-    			"IN (3,9,22,28,34,40,46,52,58,70,76,83,89,95,101,108,114,120,126) "+
-    			"GROUP BY a.censusyear, ag.DESCRIPTION,  ag.ageGroupID";
-
-        PreparedStatement tempPreparedStatement = tempConnection.prepareStatement(tempSQLSelectQuery);
-        ResultSet tempResultSet = tempPreparedStatement.executeQuery();
-        
-        List <AgeGroup> ageGroup = new ArrayList <AgeGroup>();
-
-        while (tempResultSet.next())
-        {        	
-        	AgeGroup ag = new AgeGroup(tempResultSet.getString("DESCRIPTION"),tempResultSet.getString("MALE"),tempResultSet.getString("FEMALE"), tempResultSet.getString("CENSUSYEAR"));
-        	ageGroup.add(ag);
-        }
+    	List<Age> ageGroup = new ArrayList<>();
     	
-        return ageGroup;
+    	String tempJPLSelectQuery = "SELECT a FROM Age a WHERE "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age1 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age2 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age3 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age4 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age5 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age6 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age7 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age8 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age9 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age10 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age11 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age12 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age13 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age14 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age15 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age16 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age17 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age18 OR "
+    			+ "a.geographicArea.geoAreaID = 1 AND "
+    			+ "a.ageGroup.ageGroupID = :age19";
+    
+    	//geoArea = 1
+    	//age groupID
+    	//3,9,22,28,34,40,46,52,58,70,76,83,89,95,101,108,114,120,126
     	
+    	  Query tempQuery = tempEntityManager.createQuery(tempJPLSelectQuery)
+    			  .setParameter("age1", 3)
+    			  .setParameter("age2", 9)
+    			  .setParameter("age3", 22)
+    			  .setParameter("age4", 28)
+    			  .setParameter("age5", 34)
+    			  .setParameter("age6", 40)
+    			  .setParameter("age7", 46)
+    			  .setParameter("age8", 52)
+    			  .setParameter("age9", 58)
+    			  .setParameter("age10", 70)
+    			  .setParameter("age11", 76)
+    			  .setParameter("age12", 83)
+    			  .setParameter("age13", 89)
+    			  .setParameter("age14", 95)
+    			  .setParameter("age15", 101)
+    			  .setParameter("age16", 108)
+    			  .setParameter("age17", 114)
+    			  .setParameter("age18", 120)
+    			  .setParameter("age19", 126);
+			  
+			
+    	  ageGroup = tempQuery.getResultList();
+    	  System.out.println(ageGroup.size());
+    	
+    	  return ageGroup;
+ 
     	
     }
     
+    public List<Household> getMedianIncomeList(){
+    	
+    	List<Household> medianList = new ArrayList<>();
+    	
+
+		String tempJPLSelectQuery = "SELECT h from Household h WHERE h.censusYear.censusYearID = :censusYear "
+				+ "AND h.householdType.id = :typeID AND h.householdSize.id = :sizeID AND h.householdEarners.id = :earnerID "
+				+ "AND h.geographicArea.level = :level AND h.householdsByAgeRange.id = :ageRange ORDER BY h.totalIncome DESC";
+		
+	    Query tempQuery = tempEntityManager.createQuery(tempJPLSelectQuery)
+	    		.setParameter("censusYear", 1)
+	    		.setParameter("typeID", 4)
+	    		.setParameter("sizeID", 3)
+	    		.setParameter("earnerID", 3)
+	    		.setParameter("level", 1)
+	    		.setParameter("ageRange", (Integer) 9); 
+	    
+
+	    medianList = tempQuery.getResultList();
+	
+    	
+    	return medianList;
+    }
     
 	
 	

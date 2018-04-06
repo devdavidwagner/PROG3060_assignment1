@@ -2,6 +2,8 @@
 
 //CREATED 2/13/2018
 //FINISH v.10 2/16/2018
+//FINISH v.2 ASSIGNMENT 2 4/6/2018
+
 
 //AGE GROUP SERVLET THAT RETURNS LIST OF AGE GROUPS INFO
 
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import db.DBHandler;
+import model.Age;
 import model.AgeGroup;
 
 /**
@@ -46,26 +49,13 @@ public class AgeGroupServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		DBHandler db = new DBHandler();
-		Connection conn;
+
 		try {
-			conn = db.createConnection();
-			List <AgeGroup> ageGroupList = DBHandler.getAgeGroupList(conn);
-			for(AgeGroup element : ageGroupList)
-			{
-				if(element.getAges().get.equals("1"))
-				{
-					element.setCensusYear("2016");
-				}
-				else if (element.getCensusYear().equals("2"))
-				{
-					element.setCensusYear("2011");
-				}
-				
-				
-				
-			}
+			db.createConnection();
+			List<Age> ageList = db.getAgeGroupList();
+
 						
-			request.setAttribute("ageGroups", ageGroupList);
+			request.setAttribute("ageGroups", ageList);
 			
 
 		} catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {

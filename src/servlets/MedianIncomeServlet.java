@@ -1,14 +1,11 @@
-//DAVID WAGNER + ERIC TOSSELL
-
-//CREATED 2/13/2018
-//FINISH v.10 2/16/2018
-//FINISH v.2 ASSIGNMENT 2 4/6/2018
-
-//LOGIN SERVLET TO AUTHENTICATE USER CREDENTIALS
+//MEDIUM INCOME SERVLET
+//CREATED : 4/6/2018
 
 package servlets;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,21 +13,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import db.DBHandler;
+import model.Age;
+import model.Household;
 
 /**
- * Servlet implementation class loginServlet
+ * Servlet implementation class medianIncomeServlet
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/MedianIncomeServlet")
+public class MedianIncomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public MedianIncomeServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,35 +38,33 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+		DBHandler db = new DBHandler();
+
+		try {
+			db.createConnection();
+			List<Household> houseIncomeList = db.getMedianIncomeList();
+
+						
+			request.setAttribute("households", houseIncomeList);
+			
+
+		} catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+
+		RequestDispatcher rd= request.getRequestDispatcher("./medianTotalHouseholdIncomeList.jsp");
+		rd.forward(request, response);	
+		}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		
-	    String name = request.getParameter("username");
-	    String pass = request.getParameter("password");
-	    
-
-	    
-	    
-	    if(name.equals(DBHandler.CONNECTION_USER) && pass.equals(DBHandler.CONNECTION_PASSWORD)) {
-	    	HttpSession session = request.getSession();
-	    	session.setAttribute("user", name);
-	   
-	    	 request.getRequestDispatcher("./menu.jsp").forward(request, response);		
-	    }
-	    else {
-	    	request.setAttribute("error", "Incorrect credentials!");
-	    	request.getRequestDispatcher("./index.jsp").forward(request, response);	
-	    }
-	    
-	  
-	
+		doGet(request, response);
 	}
 
 }

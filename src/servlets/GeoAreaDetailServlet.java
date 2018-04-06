@@ -2,6 +2,8 @@
 
 //CREATED 2/13/2018
 //FINISH v.10 2/16/2018
+//FINISH v.2 ASSIGNMENT 2 4/6/2018
+
 
 //SERVLET RUNS GEO AREA DETAILS 
 
@@ -55,11 +57,11 @@ public class GeoAreaDetailServlet extends HttpServlet {
 			List<Age> ages = db.getAgeByGeoAreaID(geoAreaID);
 			Integer numberHouseholdsWithin = 0;
 			GeographicArea geoArea = ages.get(0).getGeoArea();
-			List<String> geoAreasWithin = db.getAreasWithin(geoArea.getLevel(), geoArea.getAltCode());
+			List<GeographicArea> geoAreasWithin = db.getAreasWithin(geoArea.getLevel(), geoArea.getAltCode());
 			
 		
 			System.out.println("GEOGRAPHIC AREA: " + geoArea.getName());
-			if(geoArea.getLevel() == 0 || geoArea.getLevel() == 1)
+			if(geoArea.getLevel() == 0 || geoArea.getLevel() == 1 || geoArea.getLevel() == 2)
 			{
 				numberHouseholdsWithin = db.totalHouseholds(geoArea.getGeoAreaID());
 			}

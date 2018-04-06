@@ -1,5 +1,6 @@
 <!--  DAVID W + ERIC T. GEO AREA DETAILS PAGE  -->
 <!--  CREATE 2/14/2018  -->
+<!--  FINISH A2 4/6/2018  -->
 
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -26,14 +27,31 @@
 	<p>Alternative Code: ${geoArea.getAltCode()}</p>
 	<p>Level: ${geoArea.getLevel()}</p>
 	
-	<c:if test="${geoArea.getLevel() == 0 || geoArea.getLevel() ==1}">
-				<p>Households that Fit Criteria = ${numberHouseholdsWithin}</p>
-	</c:if>
 	
-	<h4>Areas within: ${geoArea.getName()}</h4>
-	<c:forEach items="${geoAreasWithin}" var="geoArea">
-		<p><c:out value="${geoArea}"></c:out></p>
-	</c:forEach>
+	<c:if test="${geoArea.getLevel() == 0 || geoArea.getLevel() ==1 || geoArea.getLevel() == 2}">
+	
+			<p>Households that Fit Criteria = ${numberHouseholdsWithin}</p>
+
+		<hr>
+		<h4>Areas within: ${geoArea.getName()}</h4>
+		
+		<table>
+			<tr>
+				<th>Name</th>
+				<th>Alternative Code</th>
+			</tr>
+		<c:forEach items="${geoAreasWithin}" var="geoArea">
+			<tr>
+			
+				<td><c:out value="${geoArea.getName()}"></c:out></td>
+				<td><c:out value="${geoArea.getAltCode()}"></c:out></td>
+			
+			
+			</tr>
+		</c:forEach>
+		</table>
+	
+	</c:if>
 	<hr>
 	
 	<table>

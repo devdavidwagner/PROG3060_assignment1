@@ -25,4 +25,8 @@
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>com.servlets.LoginServlet</servlet-class>
   </servlet>
+    <servlet>
+    <servlet-name>MedianIncomeServlet</servlet-name>
+    <servlet-class>com.servlets.MedianIncomeServlet</servlet-class>
+  </servlet>
 </web-app>

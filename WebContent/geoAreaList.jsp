@@ -1,5 +1,6 @@
 <!--  DAVID W + ERIC T. GEO AREA LIST PAGE  -->
 <!--  CREATE 2/12/2018  -->
+<!--  FINISH A2 4/6/2018  -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"

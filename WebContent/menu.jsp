@@ -27,9 +27,12 @@
 		
 				<div id ="links">
 			
-					<a href="GeoAreaServlet">Geographic Area Classifcation List</a>
+					<a href="GeoAreaServlet">Geographic Area Classification List</a>
 				
-					<a href="AgeGroupServlet">Age Group List</a>
+					<a href="AgeGroupServlet">Age Groups List</a>
+					
+					<a href="MedianIncomeServlet">Median Household Incomes</a>
+					
 				</div>
 			</c:when>
 			
